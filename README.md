@@ -1,6 +1,7 @@
 # License Plate Detection
 
 ## To Do
-[] Collect data
-[] Object detection model
-[] Combine model with Optical Character Recognition (OCR)
+- [x] Collect data
+- [x] Object detection model
+- [x] Combine model with Optical Character Recognition (OCR)
+- [ ] Fine tune OCR model
