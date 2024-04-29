@@ -9,6 +9,17 @@ def filter_text(
     filter_threshold,
     boxes
 ):
+    """
+    Filters a list of text boxes based on a filter threshold.
+
+    Args:
+        filter_threshold (float): The threshold value used to determine which boxes to filter.
+        boxes (List[Tuple[Tuple[Tuple[int, int], Tuple[int, int]], str]]): A list of text boxes, where each box is represented as a tuple containing the coordinates of the top-left and bottom-right corners of the box and the text associated with the box.
+
+    Returns:
+        List[str]: A list of the filtered text boxes.
+
+    """
     filtered = []
     box_size = []
     max_size = 0
@@ -32,6 +43,15 @@ def filter_text(
 def text_is_valid(
     text
 ):
+    """
+    Check if the given text is valid by verifying if its length is between 7 and 9 characters (inclusive).
+    
+    Parameters:
+        text (str): The text to be checked.
+    
+    Returns:
+        bool: True if the text is valid, False otherwise.
+    """
     if len(text) >= 7 and len(text) <= 9:
         return True
     return False
@@ -46,6 +66,22 @@ def draw_text(
     text_color=(0, 255, 0),
     text_color_bg=(0, 0, 0)
 ):
+    """
+    Draws text on an image at a specified position with a given font, scale, thickness, and colors.
+
+    Parameters:
+        img (numpy.ndarray): The image on which the text will be drawn.
+        text (str): The text to be drawn.
+        font (int, optional): The font type. Defaults to cv2.FONT_HERSHEY_PLAIN.
+        pos (tuple, optional): The position where the text will be drawn. Defaults to (0, 0).
+        font_scale (float, optional): The font scale. Defaults to 1.5.
+        font_thickness (int, optional): The font thickness. Defaults to 2.
+        text_color (tuple, optional): The color of the text. Defaults to (0, 255, 0).
+        text_color_bg (tuple, optional): The background color of the text. Defaults to (0, 0, 0).
+
+    Returns:
+        None
+    """
     x, y = pos
     text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
     text_w, text_h = text_size
@@ -57,6 +93,17 @@ def plate_processing(
     coordinates,
     height_threshold
 ):
+    """
+    Processes a license plate image by cropping, converting to grayscale, and applying binary thresholding.
+
+    Args:
+        frame (numpy.ndarray): The input image containing the license plate.
+        coordinates (tuple): The coordinates of the license plate in the form (x1, y1, x2, y2).
+        height_threshold (float): The threshold for adjusting the height of the cropped license plate.
+
+    Returns:
+        numpy.ndarray: The processed license plate image.
+    """
     x1, y1, x2, y2 = coordinates
     #threshold = int(((x2 - x1)*tolerance)/2)
     min_y = abs(y2-y1) * height_threshold
@@ -73,6 +120,18 @@ def plate_detection(
     frame,
     reader
 ):
+    """
+    Detects plates in a frame and performs image processing on each detected plate.
+    
+    Args:
+        args (object): An object containing various arguments.
+        model (object): The model used for plate detection.
+        frame (numpy.ndarray): The frame containing the plates.
+        reader (object): The reader used for extracting text from processed plates.
+        
+    Returns:
+        None
+    """
     # Detect plate -> plates[List]
     plates = model(frame, conf=0.7)[0]
 
@@ -112,6 +171,7 @@ def main(args):
     plate_detection_model = YOLO(args.plate_detection_model_path)
 
     if args.mode == "video":
+        # Load video
         cap = cv2.VideoCapture(args.file_path)
         
         if cap.isOpened() == False:
@@ -133,6 +193,7 @@ def main(args):
         cv2.destroyAllWindows()
     
     elif args.mode == "image":
+        # Load image
         frame = cv2.imread(args.file_path)
         plate_detection(args, plate_detection_model, frame, reader)
 
@@ -142,6 +203,7 @@ def main(args):
         cv2.destroyAllWindows()
 
     elif args.mode == "webcam":
+        # Load webcam
         cap = cv2.VideoCapture(args.webcam_id)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
         
