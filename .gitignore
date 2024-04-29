@@ -166,3 +166,4 @@ ocr_*/
 artifacts/
 config
 best*.pt
+deep-text-recognition-benchmark/
