@@ -55,7 +55,7 @@ def draw_text(
 def plate_processing(
     frame,
     coordinates,
-    height_threshold=0.25
+    height_threshold
 ):
     x1, y1, x2, y2 = coordinates
     #threshold = int(((x2 - x1)*tolerance)/2)
@@ -80,7 +80,7 @@ def plate_detection(
     for plate in plates:
         x1, y1, x2, y2 = [int(i) for i in plate.boxes.xyxy[0]]
         
-        processed_plate = plate_processing(frame, (x1, y1, x2, y2))
+        processed_plate = plate_processing(frame, (x1, y1, x2, y2), args.height_threshold)
         
         # Extract text from processed image -> text_plate[List]
         #text_plate = reader.readtext(processed_plate, allowlist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
