@@ -40,10 +40,10 @@
 
 This project aims to demonstrate the machine learning workflow for building a computer vision project, specifically focusing on license plate detection.
 
-![Training Process](images\training_process.png)
+![Training Process](images/training_process.png)
 As shown in the image above, the training process involves data collection, data annotation, fine-tuning object detection and text recognition models, image processing, adn data augmentation.
 
-![Inference Process](images\inference_process.png)
+![Inference Process](images/inference_process.png)
 For the inference process, the input frame will be fed into an object detection model that has been fine-tuned. The detected license plate will then be processed (i.e. converted to grayscale, binarization, etc.) and fed into a text recognition model. Once the text has been detected, it will be combined with the original frame as the final result.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -92,7 +92,7 @@ There are three modes in which the program can be used: `image`, `webcam`, and `
     You can replace `sample_input.jpg` with the name of your image file. The above commad will use `sample_input.jpg` as an input, just as in the installation process example.
     
     output example:
-    ![output example](images\sample_output_image.png)
+    ![Image mode output example](images/sample_output_image.png)
 
 2. Webcam mode
 
@@ -100,9 +100,10 @@ There are three modes in which the program can be used: `image`, `webcam`, and `
     ```sh
     python main.py --mode webcam --webcam_id 0
     ```
-    output example:
-
     It will open your webcam, allowing you to use it as the input frame.
+
+    output example:
+    ![Webcam mode example](images/sample_output_webcam.png)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
