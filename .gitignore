@@ -169,3 +169,4 @@ best*.pt
 deep-text-recognition-benchmark/
 run
 craft*
+ignore.pth
