@@ -4,15 +4,7 @@ from ultralytics import YOLO
 import easyocr
 import cv2
 
-# Load ocr model
-reader = easyocr.Reader(
-    ['en'],
-    user_network_directory="ocr_model",
-    model_storage_directory="ocr_model",
-    recog_network='finetuned_model')
-
 #reader = easyocr.Reader(["en"], gpu=True)
-
 def filter_text(
     filter_threshold,
     boxes
@@ -78,7 +70,8 @@ def plate_processing(
 def plate_detection(
     args,
     model,
-    frame
+    frame,
+    reader
 ):
     # Detect plate -> plates[List]
     plates = model(frame, conf=0.7)[0]
@@ -107,8 +100,16 @@ def plate_detection(
             #cv2.putText(frame, "Number not detected", (x1, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
 def main(args):
+    # Load ocr model
+    reader = easyocr.Reader(
+        ['en'],
+        user_network_directory="text_recognition_model",
+        model_storage_directory="text_recognition_model",
+        recog_network='finetuned_model'
+    )
+
     # Load fine tuned yolo model for license plate
-    plate_detection_model = YOLO(args.model_path)
+    plate_detection_model = YOLO(args.plate_detection_model_path)
 
     if args.mode == "video":
         cap = cv2.VideoCapture(args.file_path)
@@ -120,7 +121,7 @@ def main(args):
             ret, frame = cap.read()
             
             frame = imutils.resize(frame, width=720)
-            plate_detection(args, plate_detection_model, frame)
+            plate_detection(args, plate_detection_model, frame, reader)
 
             cv2.imshow('License Plate Detection', frame)
             
@@ -133,7 +134,7 @@ def main(args):
     
     elif args.mode == "image":
         frame = cv2.imread(args.file_path)
-        plate_detection(args, plate_detection_model, frame)
+        plate_detection(args, plate_detection_model, frame, reader)
 
         cv2.imshow('License Plate Detection', frame)
 
@@ -150,7 +151,7 @@ def main(args):
         # Read frame -> frame
         while(cap.isOpened()):
             ret, frame = cap.read()
-            plate_detection(args, plate_detection_model, frame)
+            plate_detection(args, plate_detection_model, frame, reader)
 
             cv2.imshow('License Plate Detection', frame)
             
@@ -172,8 +173,9 @@ if __name__ == "__main__":
     parser.add_argument("--mode", type=str, help="Mode to run", choices=["image", "video", "webcam"], default="image")
     parser.add_argument("--webcam_id", type=int, default=0, help="ID of the webcam")
     parser.add_argument("--file_path", type=str, default=None, help="Path to image file")
-    parser.add_argument("--model_path", type=str, default=None, help="Path to object detection (YOLO) model file")
-    parser.add_argument("--height_threshold", type=float, default=0.5, help="Height threshold for filtering text detection")
+    parser.add_argument("--plate_detection_model_path", type=str, default="object_detection_model/plate_detection.pt", help="Path to object detection (YOLO) model file")
+    parser.add_argument("--text_recognition_model_path", type=str, default="text_recognition_model", help="Path to text recognition model directory")
+    parser.add_argument("--height_threshold", type=float, default=0.3, help="Height threshold for filtering text detection")
     args = parser.parse_args()
 
     main(args)
