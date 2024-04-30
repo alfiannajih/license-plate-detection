@@ -147,11 +147,11 @@ There are four possible outcomes for the results:
 ![Bad Example 1](images/miss_leter.png)
 
 - Object detection works perfectly, but text recognition fails to detect letters/numbers entirely.
-![Bad Example 2](images\miss_all_letter.png)
+![Bad Example 2](images/miss_all_letter.png)
 
 - Object detection fails to detect the plate partially or entirely..
-![Bad Example 3](images\partly_detected.png)
-![Bad Example 4](images\not_detected.png)
+![Bad Example 3](images/partly_detected.png)
+![Bad Example 4](images/not_detected.png)
 
 <!-- To Do -->
 ## To Do
